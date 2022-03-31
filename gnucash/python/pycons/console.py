@@ -203,8 +203,14 @@ class Console (Gtk.ScrolledWindow):
         self.stderr = ConsoleOut (self, sys.stderr.fileno(), 'error')
         self.stdin  = ConsoleIn  (self, sys.stdin.fileno())
 
-        # Create a named pipe for system stdout/stderr redirection
-        self.fifoname = tempfile.mktemp()
+        
+          # Create a named pipe for system stdout/stderr redirection
+          # self.fifoname = tempfile.mktemp()
+          # tmp_name=tempfile.mktemp
+        tmp_file = tempfile.NamedTemporaryFile
+        self.fifoname = tmp_file.name
+        tmp_file.close()
+        
         if not os.path.exists (self.fifoname):
             os.mkfifo (self.fifoname)
         self.piperead  = os.open (self.fifoname, os.O_RDONLY | os.O_NONBLOCK)
